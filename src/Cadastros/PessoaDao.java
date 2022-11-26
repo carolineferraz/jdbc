@@ -8,7 +8,7 @@ public class PessoaDao extends Dao {
 	public void incluirPessoa(Pessoa p) throws Exception {
 		
 		open();
-		stmt = conn.prepareStatement("insert into Pessoa values(?, ?, ?)");
+		stmt = conn.prepareStatement("insert into pessoa values(?, ?, ?)");
 		stmt.setInt(1, p.getId());
 		stmt.setString(2, p.getNome());
 		stmt.setString(3, p.getEmail());
@@ -20,7 +20,7 @@ public class PessoaDao extends Dao {
 	public void alterarPessoa(Pessoa p) throws Exception {
 		
 		open();
-		stmt = conn.prepareStatement("update Pessoa nome = ?, email = ? where id = ?");
+		stmt = conn.prepareStatement("update pessoa set nome = ?, email = ? where id = ?");
 		stmt.setString(1, p.getNome());
 		stmt.setString(2, p.getEmail());
 		stmt.setInt(3, p.getId());
@@ -32,7 +32,7 @@ public class PessoaDao extends Dao {
 	public void excluirPessoa(Pessoa p) throws Exception {
 		
 		open();
-		stmt = conn.prepareStatement("delete from Pessoa where id = ?");
+		stmt = conn.prepareStatement("delete from pessoa where id = ?");
 		stmt.setInt(1, p.getId());
 		stmt.execute();
 		stmt.close();
@@ -43,6 +43,7 @@ public class PessoaDao extends Dao {
 		
 		open();
 		stmt = conn.prepareStatement("select * from pessoa where id = ?");
+		stmt.setInt(1, cod);
 		rs = stmt.executeQuery();
 		Pessoa p = null;
 		if(rs.next()) {
@@ -50,6 +51,8 @@ public class PessoaDao extends Dao {
 			p.setId(rs.getInt("id"));
 			p.setNome(rs.getString("nome"));
 			p.setEmail(rs.getString("email"));
+		} else {
+			System.out.println("Registro não encontrado");
 		}
 		close();
 		return p;
@@ -58,7 +61,7 @@ public class PessoaDao extends Dao {
 	public List<Pessoa> ListarPessoas() {
 		try {
 			open();
-			stmt = conn.prepareStatement("select * from Pessoa");
+			stmt = conn.prepareStatement("select * from pessoa");
 			rs = stmt.executeQuery();
 			List<Pessoa> listaPessoas = new ArrayList<>();
 			while(rs.next()) {
